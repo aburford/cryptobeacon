@@ -1,0 +1,41 @@
+DESC="iBeacon Application Software"
+PIDFILE=/var/run/ibeacon.pid
+SCRIPTNAME=/etc/init.d/ibeacon
+
+start() {
+	. /etc/cryptobeacon.conf
+	echo "Launching cryptobeacon..."
+	sudo hciconfig $BLUETOOTH_DEVICE up
+	sudo hciconfig $BLUETOOTH_DEVICE noleadv
+	sudo hcitool -i hci0 cmd 0x08 0x0008 1e 02 01 1a 1a ff 4c 00 02 15 $UUID $MAJOR $MINOR $POWER 00 00 00 00 00 00 00 00 00 00 00 00 00
+	sudo hciconfig $BLUETOOTH_DEVICE leadv 3
+	# set up the alternating UUID somehow...
+	echo "Complete"
+}
+
+stop() {
+	. /etc/ibeacon.conf
+	echo "Disabling cryptobeacon"
+	sudo hciconfig $BLUETOOTH_DEVICE noleadv
+	echo "Complete"
+}
+
+case "$1" in
+start)
+        printf "%-50s" "Starting cryptobeacon..."
+        cd /home/pi
+	start
+;;
+stop)
+        printf "%-50s" "Stopping cryptobeacon..."
+        cd /home/pi
+        stop
+;;
+restart)
+        stop
+        start
+;;
+*)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
