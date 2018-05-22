@@ -2,7 +2,8 @@ CryptoBeacon
 ========
 
 ## Installation
-		$ sudo cp cryptobeacon.conf /etc
+		$ sudo mkdir /etc/cryptobeacon
+		$ sudo cp cryptobeacon.conf cryptobeacon.sh /etc/cryptobeacon
 		$ sudo cp cryptobeacon /etc/init.d
 		$ sudo update-rc.d cryptobeacon defaults
 

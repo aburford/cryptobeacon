@@ -3,18 +3,19 @@ PIDFILE=/var/run/cryptobeacon.pid
 SCRIPTNAME=/etc/init.d/cryptobeacon
 
 start() {
-	. /etc/cryptobeacon.conf
+	. /etc/cryptobeacon/cryptobeacon.conf
 	echo "Launching cryptobeacon..."
 	sudo hciconfig $BLUETOOTH_DEVICE up
 	sudo hciconfig $BLUETOOTH_DEVICE noleadv
-	sudo hcitool -i hci0 cmd 0x08 0x0008 1e 02 01 1a 1a ff 4c 00 02 15 $UUID $MAJOR $MINOR $POWER 00 00 00 00 00 00 00 00 00 00 00 00 00
+	sudo hcitool -i $BLUETOOTH_DEVICE cmd 0x08 0x0008 1e02011a 1a ff 4c 00 02 15 $UUID $MAJOR $MINOR $POWER 00 00 00 00 00 00 00 00 00 00 00 00 00
 	sudo hciconfig $BLUETOOTH_DEVICE leadv 3
-	# set up the alternating UUID somehow...
+	# use a pid file to kill this process later?
+	. /etc/cryptobeacon/cryptobeacon.sh > /dev/null 2>&1 &
 	echo "Complete"
 }
 
 stop() {
-	. /etc/cryptobeacon.conf
+	. /etc/cryptobeacon/cryptobeacon.conf
 	echo "Disabling cryptobeacon"
 	sudo hciconfig $BLUETOOTH_DEVICE noleadv
 	echo "Complete"
