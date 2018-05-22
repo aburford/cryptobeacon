@@ -1,6 +1,6 @@
-DESC="iBeacon Application Software"
-PIDFILE=/var/run/ibeacon.pid
-SCRIPTNAME=/etc/init.d/ibeacon
+DESC="CryptoBeacon Application Software"
+PIDFILE=/var/run/cryptobeacon.pid
+SCRIPTNAME=/etc/init.d/cryptobeacon
 
 start() {
 	. /etc/cryptobeacon.conf
@@ -14,7 +14,7 @@ start() {
 }
 
 stop() {
-	. /etc/ibeacon.conf
+	. /etc/cryptobeacon.conf
 	echo "Disabling cryptobeacon"
 	sudo hciconfig $BLUETOOTH_DEVICE noleadv
 	echo "Complete"
